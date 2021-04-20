@@ -5,6 +5,7 @@ import { MOVIE_DATA, FILTER_TYPES } from 'config'
 import { Box, InfiniteScroll, Spinner } from 'grommet'
 import MovieFilter from 'components/movie-filter'
 import MovieCard from 'components/movie-card'
+import MovieDetails from 'components/movie-details'
 import { sortMovies } from 'helpers'
 
 const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
@@ -14,10 +15,12 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
     const { results } = MOVIE_DATA
     const { movieId } = match.params
 
-    const [sortKey, setSortKey] = useState(FILTER_TYPES[0])
+    const [sort_type, setSortType] = useState(FILTER_TYPES[0])
     const [is_loading, setIsLoading] = useState(true)
     const [is_fetching, setIsFetching] = useState(false)
     const [movies, setMovies] = useState({})
+    const [selected_movie, setSelectedMovie] = useState(movieId)
+    const [show_details, setShowDetails] = useState(false)
 
     useEffect(() => {
         console.log('mounted home')
@@ -55,14 +58,16 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
 
     const handleClick = (event: React.MouseEvent<HTMLElement>, id: string) => {
         event.preventDefault()
+        setSelectedMovie(id)
+        setShowDetails(true)
     }
 
     return (
         <div>
             <MovieFilter
-                value={sortKey.value}
-                text={sortKey.text}
-                onChange={setSortKey}
+                value={sort_type.value}
+                text={sort_type.text}
+                onChange={setSortType}
             />
             <PullToRefresh onRefresh={handleRefresh} pullDownThreshold={90}>
                 {is_loading ? (
@@ -71,7 +76,7 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
                     <React.Fragment>
                         <div style={{ overflowY: 'auto' }}>
                             <InfiniteScroll
-                                items={sortMovies(movies, sortKey.value)}
+                                items={sortMovies(movies, sort_type.value)}
                                 step={4}
                                 onMore={handleFetchMore}
                             >
@@ -99,6 +104,12 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
                     </React.Fragment>
                 )}
             </PullToRefresh>
+            {show_details && (
+                <MovieDetails
+                    id={selected_movie}
+                    onClose={() => setShowDetails(false)}
+                />
+            )}
         </div>
     )
 }

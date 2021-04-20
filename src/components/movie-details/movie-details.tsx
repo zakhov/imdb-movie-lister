@@ -1,12 +1,15 @@
 import * as React from 'react'
+import ReactDOM from 'react-dom'
 import { Button, Layer } from 'grommet'
 
 const MovieDetails: React.FC<TMovieDetailsProps> = ({ id, onClose }) => {
-    return (
+    const modal_root = document.getElementById('modal-root') as HTMLElement
+    return ReactDOM.createPortal(
         <Layer position="center" onClickOutside={onClose} onEsc={onClose}>
             {id}
             <Button onClick={onClose}>Close</Button>
-        </Layer>
+        </Layer>,
+        modal_root
     )
 }
 

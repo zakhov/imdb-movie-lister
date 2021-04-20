@@ -19,10 +19,9 @@ export const getDate = (date: string) => {
 
 export const sortMovies = (
     moviesObj: any,
-    sortKey: string,
+    sort_type: string,
     is_descending: boolean = true
 ) => {
-    console.log('sorting', sortKey)
     const parseValue = (value: any, value_type: string) => {
         if (value_type === 'release_date') {
             return getDate(value).epoch
@@ -30,9 +29,9 @@ export const sortMovies = (
         return value
     }
     const sortArray = moviesObj.sort((a: any, b: any) => {
-        const value_a = parseValue(a[sortKey], sortKey)
-        const value_b = parseValue(b[sortKey], sortKey)
-        if (is_descending && sortKey !== 'title') {
+        const value_a = parseValue(a[sort_type], sort_type)
+        const value_b = parseValue(b[sort_type], sort_type)
+        if (is_descending && sort_type !== 'title') {
             if (value_a < value_b) return 1
             else if (value_b < value_a) return -1
         } else {
