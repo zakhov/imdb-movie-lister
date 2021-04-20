@@ -1,19 +1,30 @@
 import * as React from 'react'
-import { MOVIE_DATA } from '../../constants/mock-data'
-import MovieCard from '../../components/movie-card/movie-card'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 import { RouteComponentProps } from 'react-router-dom'
+import { MOVIE_DATA } from '../../constants/mock-data'
+import MovieCard from '../../components/movie-card/'
+import { sortMovies } from '../../helpers/tmdb'
 
 const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
-    const { useEffect } = React
+    const { useEffect, useState } = React
     const { results } = MOVIE_DATA
 
+    const [sortKey, setSortKey] = useState('release_date')
+    const [movies, setMovies] = useState(results)
+
     useEffect(() => {
+        if (movies?.length > 1) {
+            setMovies(sortMovies(movies, sortKey))
+        }
         console.log(history, location)
-        console.log(MOVIE_DATA.results)
+        console.log(sortMovies(results, sortKey))
         console.log('mounted home')
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useEffect(() => {
+        sortMovies(movies, sortKey)
+    }, [movies, sortKey])
 
     const handleRefresh = (): Promise<void> =>
         new Promise((res) => {
@@ -29,10 +40,7 @@ const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
             }, 1500)
         })
 
-    const handleClick: any = (
-        event: React.MouseEvent<HTMLElement>,
-        id: string
-    ) => {
+    const handleClick = (event: React.MouseEvent<HTMLElement>, id: string) => {
         event.preventDefault()
         console.log('click', id)
     }
@@ -44,7 +52,7 @@ const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
             onFetchMore={handleFetchMore}
         >
             <React.Fragment>
-                {results.map((item: any, index: number) => (
+                {movies.map((item: any, index: number) => (
                     <MovieCard
                         key={index}
                         title={item.title}

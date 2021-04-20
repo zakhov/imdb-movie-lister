@@ -8,7 +8,7 @@ import {
     Image,
     Heading,
 } from 'grommet'
-import { getDate, getImageURL } from '../../helpers/tmdb'
+import { getDate, getImageURL } from '../../helpers'
 
 const MovieCard: React.FC<TMovieCardProps> = ({
     poster,
@@ -24,8 +24,8 @@ const MovieCard: React.FC<TMovieCardProps> = ({
             <Card elevation="large" width="medium" onClick={onClick}>
                 <Box direction="row" justify="center" align="center" gap="none">
                     <CardHeader height="xxsmall">
-                        <Heading level="3">
-                            {title} - {getDate(release_date).year}
+                        <Heading level="4">
+                            {title} ({getDate(release_date).year})
                         </Heading>
                     </CardHeader>
                 </Box>
@@ -34,8 +34,8 @@ const MovieCard: React.FC<TMovieCardProps> = ({
                         fit="cover"
                         src={
                             poster
-                                ? getImageURL(poster, 300)
-                                : 'https://place-hold.it/300x500'
+                                ? getImageURL(poster, 500)
+                                : 'https://place-hold.it/500x500'
                         }
                         a11yTitle="poster"
                     />
