@@ -1,7 +1,7 @@
 import * as React from 'react'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 import { RouteComponentProps } from 'react-router-dom'
-import { MOVIE_DATA, FILTER_TYPES } from 'config'
+import { movieListEndPoint } from 'config'
 import { Box, InfiniteScroll, Spinner } from 'grommet'
 import MovieFilter from 'components/movie-filter'
 import MovieCard from 'components/movie-card'
@@ -12,37 +12,42 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
     match,
 }) => {
     const { useEffect, useState } = React
-    const { results } = MOVIE_DATA
+
     const { movieId } = match.params
 
-    const [sort_type, setSortType] = useState(FILTER_TYPES[0])
+    const [sort_type, setSortType] = useState({
+        value: 'release_date',
+        text: 'Release date',
+    })
+    const [selected_movie, setSelectedMovie] = useState(movieId)
+    const [movies_list, setMoviesList] = useState([])
+    const [show_details, setShowDetails] = useState(false)
     const [is_loading, setIsLoading] = useState(true)
     const [is_fetching, setIsFetching] = useState(false)
-    const [movies, setMovies] = useState({})
-    const [selected_movie, setSelectedMovie] = useState(movieId)
-    const [show_details, setShowDetails] = useState(false)
 
     useEffect(() => {
-        console.log('mounted home')
-        if (results.length) {
-            setMovies(results)
+        if (movieId) {
+            setShowDetails(true)
+        }
+
+        const fetchDetails = async () => {
+            const response = await fetch(movieListEndPoint)
+            const list = await response.json()
+            setMoviesList(list.results)
             setIsLoading(false)
         }
 
-        if (movieId) {
-            console.log(movieId)
-        }
+        fetchDetails()
+
         // fetch API here if fresh state
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const handleRefresh = (): Promise<void> =>
         new Promise((res) => {
-            setIsLoading(true)
             // clear movies in store and fetch again from API
             setTimeout(() => {
                 res(console.log('done refresh'))
-                setIsLoading(false)
             }, 1500)
         })
 
@@ -51,8 +56,8 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
             setIsFetching(true)
             // fetch more data from API for movies, page: 1++...
             setTimeout(() => {
-                setIsFetching(false)
                 res(console.log('done fetching'))
+                setIsFetching(false)
             }, 3500)
         })
 
@@ -76,7 +81,7 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
                     <React.Fragment>
                         <div style={{ overflowY: 'auto' }}>
                             <InfiniteScroll
-                                items={sortMovies(movies, sort_type.value)}
+                                items={sortMovies(movies_list, sort_type.value)}
                                 step={4}
                                 onMore={handleFetchMore}
                             >

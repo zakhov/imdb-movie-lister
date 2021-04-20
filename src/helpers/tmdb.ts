@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
 
-export const getImageURL = (filename: string, size: number) => {
+export const getImageURL = (filename: string, size?: number | boolean) => {
     if (size) {
         return `https://image.tmdb.org/t/p/w${size}/${filename}`
     }
@@ -15,6 +16,17 @@ export const getDate = (date: string) => {
         day: formatted_date.get('d'),
         epoch: formatted_date.unix(),
     }
+}
+
+export const getMovieDuration = (runtime: number) => {
+    dayjs.extend(duration)
+    const time = dayjs.duration(runtime, 'minutes')
+    const hours = time.hours()
+    const minutes = time.minutes()
+
+    return `${hours} ${hours > 1 ? 'Hours' : 'Hour'} ${minutes} ${
+        minutes > 1 ? 'Minutes' : 'Minute'
+    }`
 }
 
 export const sortMovies = (

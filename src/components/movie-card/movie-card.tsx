@@ -29,9 +29,9 @@ const MovieCard: React.FC<TMovieCardProps> = ({
                         </Heading>
                     </CardHeader>
                 </Box>
-                <CardBody height="small">
+                <CardBody height="auto" background="black">
                     <Image
-                        fit="cover"
+                        fit="contain"
                         src={
                             poster
                                 ? getImageURL(poster, 500)
@@ -45,7 +45,6 @@ const MovieCard: React.FC<TMovieCardProps> = ({
                         direction="row"
                         justify="end"
                         align="center"
-                        gap="small"
                         pad="medium"
                     >
                         TVDB Popularity: {rating}
