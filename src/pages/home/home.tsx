@@ -3,15 +3,20 @@ import PullToRefresh from 'react-simple-pull-to-refresh'
 import { RouteComponentProps } from 'react-router-dom'
 import { MOVIE_DATA, FILTER_TYPES } from '../../constants'
 import MovieCard from '../../components/movie-card'
+import { Box, InfiniteScroll, Spinner } from 'grommet'
 import MovieFilter from '../../components/movie-filter'
 import { sortMovies } from '../../helpers/tmdb'
 
-const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
+const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
+    match,
+}) => {
     const { useEffect, useState } = React
     const { results } = MOVIE_DATA
+    const { movieId } = match.params
 
     const [sortKey, setSortKey] = useState(FILTER_TYPES[0])
     const [is_loading, setIsLoading] = useState(true)
+    const [is_fetching, setIsFetching] = useState(false)
     const [movies, setMovies] = useState({})
 
     useEffect(() => {
@@ -19,6 +24,10 @@ const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
         if (results.length) {
             setMovies(results)
             setIsLoading(false)
+        }
+
+        if (movieId) {
+            console.log(movieId)
         }
         // fetch API here if fresh state
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -34,15 +43,16 @@ const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
 
     const handleFetchMore = (): Promise<void> =>
         new Promise((res) => {
+            setIsFetching(true)
             // fetch more data from API for movies, page: 1++...
             setTimeout(() => {
+                setIsFetching(false)
                 res(console.log('done fetching'))
-            }, 1500)
+            }, 3500)
         })
 
     const handleClick = (event: React.MouseEvent<HTMLElement>, id: string) => {
         event.preventDefault()
-        console.log('click', id)
     }
 
     return (
@@ -52,30 +62,37 @@ const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
                 text={sortKey.text}
                 onChange={setSortKey}
             />
-            <PullToRefresh
-                onRefresh={handleRefresh}
-                canFetchMore={true}
-                onFetchMore={handleFetchMore}
-            >
+            <PullToRefresh onRefresh={handleRefresh} pullDownThreshold={90}>
                 {is_loading ? (
                     <div>content is loading..</div>
                 ) : (
                     <React.Fragment>
-                        {sortMovies(movies, sortKey.value).map(
-                            (item: any, index: number) => (
-                                <MovieCard
-                                    key={index}
-                                    title={item.title}
-                                    backdrop={item.backdrop_path}
-                                    release_date={item.release_date}
-                                    poster={item.poster_path}
-                                    plot={item.overview}
-                                    rating={item.popularity}
-                                    onClick={(
-                                        event: React.MouseEvent<HTMLElement>
-                                    ) => handleClick(event, item.id)}
-                                />
-                            )
+                        <div style={{ overflowY: 'auto' }}>
+                            <InfiniteScroll
+                                items={sortMovies(movies, sortKey.value)}
+                                step={4}
+                                onMore={handleFetchMore}
+                            >
+                                {(item: any, index: number) => (
+                                    <MovieCard
+                                        key={index}
+                                        title={item.title}
+                                        backdrop={item.backdrop_path}
+                                        release_date={item.release_date}
+                                        poster={item.poster_path}
+                                        plot={item.overview}
+                                        rating={item.popularity}
+                                        onClick={(
+                                            event: React.MouseEvent<HTMLElement>
+                                        ) => handleClick(event, item.id)}
+                                    />
+                                )}
+                            </InfiniteScroll>
+                        </div>
+                        {is_fetching && (
+                            <Box align="center" gap="small">
+                                <Spinner size="large" />
+                            </Box>
                         )}
                     </React.Fragment>
                 )}

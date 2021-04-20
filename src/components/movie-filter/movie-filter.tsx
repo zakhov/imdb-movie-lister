@@ -7,23 +7,14 @@ const MovieFilter: React.FC<TMovieFilterProps> = ({
     value,
     onChange,
 }) => {
-    const [selected, setSelected] = React.useState<String>(text)
+    // const [selected, setSelected] = React.useState<String>(text)
     const select_ref = React.useRef<HTMLSelectElement>(null)
     const options = FILTER_TYPES
 
-    const onFilterClick = (event: React.MouseEvent<HTMLElement>) => {
-        event.preventDefault()
-        const synthetic_event = new MouseEvent('mousedown')
-        select_ref.current?.dispatchEvent(synthetic_event)
-    }
-
     return (
         <div className="movies-filter">
-            <div onClick={onFilterClick} className="movies-filter__display">
-                <Filter
-                    size="large"
-                    className={`movies-filter-icon--${selected}`}
-                />
+            <div className="movies-filter__display">
+                <Filter size="large" className={'movies-filter__icon'} />
             </div>
             <select
                 ref={select_ref}
@@ -36,7 +27,7 @@ const MovieFilter: React.FC<TMovieFilterProps> = ({
                     const { selectedIndex, value } = event.currentTarget
                     const display_text = options[selectedIndex].text
                     onChange({ value, text: display_text })
-                    setSelected(display_text)
+                    // setSelected(display_text)
                 }}
             >
                 {options.map((option, index) => (
