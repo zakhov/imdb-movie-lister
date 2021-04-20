@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Filter } from 'grommet-icons'
-import { FILTER_TYPES } from '../../constants'
+import { FILTER_TYPES } from 'config'
 
 const MovieFilter: React.FC<TMovieFilterProps> = ({
     text,

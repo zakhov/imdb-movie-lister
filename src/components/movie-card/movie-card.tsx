@@ -8,7 +8,7 @@ import {
     Image,
     Heading,
 } from 'grommet'
-import { getDate, getImageURL } from '../../helpers'
+import { getDate, getImageURL } from 'helpers'
 
 const MovieCard: React.FC<TMovieCardProps> = ({
     poster,

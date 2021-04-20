@@ -1,11 +1,11 @@
 import * as React from 'react'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 import { RouteComponentProps } from 'react-router-dom'
-import { MOVIE_DATA, FILTER_TYPES } from '../../constants'
-import MovieCard from '../../components/movie-card'
+import { MOVIE_DATA, FILTER_TYPES } from 'config'
 import { Box, InfiniteScroll, Spinner } from 'grommet'
-import MovieFilter from '../../components/movie-filter'
-import { sortMovies } from '../../helpers/tmdb'
+import MovieFilter from 'components/movie-filter'
+import MovieCard from 'components/movie-card'
+import { sortMovies } from 'helpers'
 
 const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
     match,
@@ -35,9 +35,11 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
 
     const handleRefresh = (): Promise<void> =>
         new Promise((res) => {
+            setIsLoading(true)
             // clear movies in store and fetch again from API
             setTimeout(() => {
                 res(console.log('done refresh'))
+                setIsLoading(false)
             }, 1500)
         })
 
