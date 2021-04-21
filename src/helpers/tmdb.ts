@@ -40,6 +40,7 @@ export const sortMovies = (
         }
         return value
     }
+    console.log(sort_type)
     const sortArray = moviesObj.sort((a: any, b: any) => {
         const value_a = parseValue(a[sort_type], sort_type)
         const value_b = parseValue(b[sort_type], sort_type)

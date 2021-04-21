@@ -12,11 +12,15 @@ import {
     Layer,
     Text,
 } from 'grommet'
-import { Close } from 'grommet-icons'
+import { Close, ShareOption } from 'grommet-icons'
 import { movieDetailsEndPoint } from 'config'
 import { getMovieDuration, getDate, getImageURL } from 'helpers'
 
-const MovieDetails: React.FC<TMovieDetailsProps> = ({ id, onClose }) => {
+const MovieDetails: React.FC<TMovieDetailsProps> = ({
+    id,
+    is_page,
+    onClose,
+}) => {
     const modal_root = document.getElementById('modal-root') as HTMLElement
 
     const { useEffect, useState } = React
@@ -47,14 +51,8 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({ id, onClose }) => {
     const bookMovie = (event: React.MouseEvent<HTMLElement>) =>
         window.open('https://www.cathaycineplexes.com.sg/', '__blank')
 
-    return ReactDOM.createPortal(
-        <Layer
-            animation="slide"
-            full
-            position="center"
-            onClickOutside={onClose}
-            onEsc={onClose}
-        >
+    const movieDetailsContent = (
+        <React.Fragment>
             {states.is_loading ? (
                 <Box pad="medium" fill>
                     <Box
@@ -88,7 +86,7 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({ id, onClose }) => {
                     </Box>
                     <CardBody>
                         <Image
-                            fit="cover"
+                            fit="contain"
                             src={
                                 poster_path
                                     ? getImageURL(poster_path, false)
@@ -186,10 +184,29 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({ id, onClose }) => {
                                 label="Book Movie"
                                 onClick={bookMovie}
                             />
+                            <Box direction="row" pad="small">
+                                <ShareOption size="medium" />
+                            </Box>
                         </Box>
                     </CardFooter>
                 </Box>
             )}
+        </React.Fragment>
+    )
+
+    if (is_page) {
+        return movieDetailsContent
+    }
+
+    return ReactDOM.createPortal(
+        <Layer
+            animation="slide"
+            full
+            position="center"
+            onClickOutside={onClose}
+            onEsc={onClose}
+        >
+            {movieDetailsContent}
         </Layer>,
         modal_root
     )
@@ -197,6 +214,7 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({ id, onClose }) => {
 
 type TMovieDetailsProps = {
     id: string
+    is_page: boolean
     onClose: any
 }
 

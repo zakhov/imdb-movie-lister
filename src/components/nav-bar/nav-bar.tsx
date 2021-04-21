@@ -1,5 +1,6 @@
 import { Box } from 'grommet'
-import { Filter } from 'grommet-icons'
+import { Link } from 'react-router-dom'
+import { Home } from 'grommet-icons'
 
 const NavBar: React.FC = () => (
     <Box
@@ -12,7 +13,9 @@ const NavBar: React.FC = () => (
         elevation="large"
         style={{ zIndex: 2 }}
     >
-        <Filter size="large" />
+        <Link to="/">
+            <Home size="large" />
+        </Link>
     </Box>
 )
 

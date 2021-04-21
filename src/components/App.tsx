@@ -6,8 +6,8 @@ import Navbar from 'components/nav-bar'
 const App: React.FC = () => {
     return (
         <React.Fragment>
-            <Navbar />
             <Router>
+                <Navbar />
                 <Routes />
             </Router>
         </React.Fragment>

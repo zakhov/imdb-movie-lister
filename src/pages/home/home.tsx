@@ -8,57 +8,71 @@ import MovieCard from 'components/movie-card'
 import MovieDetails from 'components/movie-details'
 import { sortMovies } from 'helpers'
 
-const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
-    match,
-}) => {
+const Home: React.FC<RouteComponentProps<{ movieId: string }>> = () => {
     const { useEffect, useState } = React
-
-    const { movieId } = match.params
 
     const [sort_type, setSortType] = useState({
         value: 'release_date',
         text: 'Release date',
     })
-    const [selected_movie, setSelectedMovie] = useState(movieId)
+    const [selected_movie, setSelectedMovie] = useState('')
+    const [pageNumber, setPageNumber] = useState(1)
     const [movies_list, setMoviesList] = useState([])
     const [show_details, setShowDetails] = useState(false)
     const [is_loading, setIsLoading] = useState(true)
     const [is_fetching, setIsFetching] = useState(false)
 
     useEffect(() => {
-        if (movieId) {
-            setShowDetails(true)
-        }
-
-        const fetchDetails = async () => {
-            const response = await fetch(movieListEndPoint)
-            const list = await response.json()
-            setMoviesList(list.results)
+        fetchDetails(pageNumber).then((movies: any) => {
+            const sorted_movies = sortMovies(movies, sort_type.value)
+            setMoviesList(sorted_movies)
             setIsLoading(false)
-        }
-
-        fetchDetails()
-
-        // fetch API here if fresh state
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const onSortUpdate = (sort_type_obj: any) => {
+        setSortType(sort_type_obj)
+        const sorted_movies = sortMovies(movies_list, sort_type_obj.value)
+        setMoviesList(sorted_movies)
+    }
+
+    const fetchDetails = async (pageNumber: number): Promise<void> => {
+        const response = await fetch(
+            movieListEndPoint(pageNumber, sort_type.value, true)
+        )
+        const list = await response.json()
+        return list.results
+    }
+
     const handleRefresh = (): Promise<void> =>
         new Promise((res) => {
-            // clear movies in store and fetch again from API
-            setTimeout(() => {
-                res(console.log('done refresh'))
-            }, 1500)
+            setPageNumber(1)
+            setMoviesList([])
+            // fetch new data
+            setIsLoading(true)
+            fetchDetails(1).then((movies: any) => {
+                const sorted_movies = sortMovies(movies, sort_type.value)
+                setMoviesList(sorted_movies)
+                setTimeout(() => {
+                    res(setIsLoading(false))
+                }, 1500)
+            })
         })
 
     const handleFetchMore = (): Promise<void> =>
         new Promise((res) => {
-            setIsFetching(true)
+            const pageCount = pageNumber + 1
+            setPageNumber(pageCount)
             // fetch more data from API for movies, page: 1++...
-            setTimeout(() => {
-                res(console.log('done fetching'))
-                setIsFetching(false)
-            }, 3500)
+            setIsFetching(true)
+            fetchDetails(pageCount).then((movies: any) => {
+                const merged_movies: any = [...movies_list, ...movies]
+                setMoviesList(merged_movies)
+                setTimeout(() => {
+                    res(setIsFetching(false))
+                }, 1500)
+            })
         })
 
     const handleClick = (event: React.MouseEvent<HTMLElement>, id: string) => {
@@ -67,23 +81,38 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
         setShowDetails(true)
     }
 
+    const LoadingComponent = () => (
+        <Box fill pad="large">
+            <Box direction="row" justify="center" align="center" pad="medium">
+                Content is loading..
+            </Box>
+        </Box>
+    )
+
     return (
         <div>
             <MovieFilter
                 value={sort_type.value}
                 text={sort_type.text}
-                onChange={setSortType}
+                onChange={onSortUpdate}
             />
-            <PullToRefresh onRefresh={handleRefresh} pullDownThreshold={90}>
-                {is_loading ? (
-                    <div>content is loading..</div>
+            <PullToRefresh
+                onRefresh={handleRefresh}
+                pullDownThreshold={90}
+                refreshingContent={<LoadingComponent />}
+                onFetchMore={handleFetchMore}
+                canFetchMore
+            >
+                {is_loading || movies_list.length < 1 ? (
+                    <div />
                 ) : (
                     <React.Fragment>
-                        <div style={{ overflowY: 'auto' }}>
+                        <Box fill overflow="auto">
                             <InfiniteScroll
-                                items={sortMovies(movies_list, sort_type.value)}
+                                items={movies_list.filter(
+                                    (movie: any) => !!movie.title
+                                )}
                                 step={4}
-                                onMore={handleFetchMore}
                             >
                                 {(item: any, index: number) => (
                                     <MovieCard
@@ -100,7 +129,7 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
                                     />
                                 )}
                             </InfiniteScroll>
-                        </div>
+                        </Box>
                         {is_fetching && (
                             <Box align="center" gap="small">
                                 <Spinner size="large" />
@@ -112,6 +141,7 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = ({
             {show_details && (
                 <MovieDetails
                     id={selected_movie}
+                    is_page={false}
                     onClose={() => setShowDetails(false)}
                 />
             )}
