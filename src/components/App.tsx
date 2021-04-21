@@ -9,7 +9,7 @@ const App: React.FC = () => {
         <React.Fragment>
             <Router>
                 <Navbar />
-                <Box height="xsmall" />
+                <Box style={{ height: '64px', pointerEvents: 'none' }} />
                 <Routes />
             </Router>
         </React.Fragment>

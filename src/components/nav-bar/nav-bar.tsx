@@ -7,14 +7,14 @@ const NavBar: React.FC = () => (
         as="header"
         direction="row"
         align="center"
-        pad={{ vertical: 'small', horizontal: 'medium' }}
+        pad={{ vertical: 'small', horizontal: 'small' }}
         justify="between"
         background="neutral-3"
         elevation="large"
-        style={{ zIndex: 2, position: 'fixed', height: '88px', width: '100%' }}
+        style={{ zIndex: 2, position: 'fixed', height: '50px', width: '100%' }}
     >
         <Link to="/">
-            <Home size="large" />
+            <Home size="medium" />
         </Link>
         <Box id="filter-root" direction="column" />
     </Box>

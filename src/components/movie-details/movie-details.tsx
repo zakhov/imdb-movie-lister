@@ -43,7 +43,7 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({
     const {
         overview,
         poster_path,
-        backdrop_path,
+        // backdrop_path,
         genres,
         spoken_languages,
         runtime,
@@ -63,7 +63,7 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({
                     <Box fill pad={{ vertical: 'small', horizontal: 'medium' }}>
                         <Box
                             direction="row"
-                            justify="between"
+                            justify={is_page ? 'center' : 'between'}
                             align="center"
                             gap="none"
                         >
@@ -95,6 +95,11 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({
                                     size: 'auto',
                                 }}
                                 gap="small"
+                                pad="small"
+                                style={{
+                                    justifyItems: 'center',
+                                    alignItems: 'flex-start',
+                                }}
                             >
                                 <Box
                                     justify="center"
@@ -168,7 +173,7 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({
                                 </Text>
                             </Box>
                         </CardBody>
-                        <CardFooter>
+                        <CardFooter style={{ marginTop: 'auto' }}>
                             <Box
                                 fill
                                 direction="row"
@@ -179,11 +184,9 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({
                                 <Button
                                     primary
                                     label="Book Movie"
+                                    icon={<ShareOption size="medium" />}
                                     onClick={bookMovie}
                                 />
-                                <Box direction="row" pad="small">
-                                    <ShareOption size="medium" />
-                                </Box>
                             </Box>
                         </CardFooter>
                     </Box>

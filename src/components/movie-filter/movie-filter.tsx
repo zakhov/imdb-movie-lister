@@ -1,6 +1,5 @@
 import * as React from 'react'
 import ReactDOM from 'react-dom'
-import { Box } from 'grommet'
 import { Filter } from 'grommet-icons'
 import { FILTER_TYPES } from 'config'
 
@@ -21,7 +20,7 @@ const MovieFilter: React.FC<TMovieFilterProps> = ({
         <div className="movies-filter">
             <div className="movies-filter__display">
                 <Filter
-                    size="large"
+                    size="medium"
                     className="movies-filter__icon"
                     color="white"
                 />

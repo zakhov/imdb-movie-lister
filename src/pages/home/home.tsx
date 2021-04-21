@@ -81,7 +81,7 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = () => {
     }
 
     return (
-        <div>
+        <React.Fragment>
             <MovieFilter
                 value={sort_type.value}
                 text={sort_type.text}
@@ -135,7 +135,7 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = () => {
                     onClose={() => setShowDetails(false)}
                 />
             )}
-        </div>
+        </React.Fragment>
     )
 }
 
