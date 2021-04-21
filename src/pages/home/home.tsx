@@ -6,6 +6,7 @@ import { Box, InfiniteScroll, Spinner } from 'grommet'
 import MovieFilter from 'components/movie-filter'
 import MovieCard from 'components/movie-card'
 import MovieDetails from 'components/movie-details'
+import Loading from 'components/loading'
 import { sortMovies } from 'helpers'
 
 const Home: React.FC<RouteComponentProps<{ movieId: string }>> = () => {
@@ -38,9 +39,7 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = () => {
     }
 
     const fetchDetails = async (pageNumber: number): Promise<void> => {
-        const response = await fetch(
-            movieListEndPoint(pageNumber, sort_type.value, true)
-        )
+        const response = await fetch(movieListEndPoint(pageNumber))
         const list = await response.json()
         return list.results
     }
@@ -81,14 +80,6 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = () => {
         setShowDetails(true)
     }
 
-    const LoadingComponent = () => (
-        <Box fill pad="large">
-            <Box direction="row" justify="center" align="center" pad="medium">
-                Content is loading..
-            </Box>
-        </Box>
-    )
-
     return (
         <div>
             <MovieFilter
@@ -99,12 +90,11 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = () => {
             <PullToRefresh
                 onRefresh={handleRefresh}
                 pullDownThreshold={90}
-                refreshingContent={<LoadingComponent />}
                 onFetchMore={handleFetchMore}
                 canFetchMore
             >
                 {is_loading || movies_list.length < 1 ? (
-                    <div />
+                    <Loading />
                 ) : (
                     <React.Fragment>
                         <Box fill overflow="auto">

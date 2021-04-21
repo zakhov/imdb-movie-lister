@@ -1,4 +1,6 @@
 import * as React from 'react'
+import ReactDOM from 'react-dom'
+import { Box } from 'grommet'
 import { Filter } from 'grommet-icons'
 import { FILTER_TYPES } from 'config'
 
@@ -7,14 +9,22 @@ const MovieFilter: React.FC<TMovieFilterProps> = ({
     value,
     onChange,
 }) => {
+    const filter_root = document.getElementById('filter-root') as HTMLElement
+
     // const [selected, setSelected] = React.useState<String>(text)
     const select_ref = React.useRef<HTMLSelectElement>(null)
     const options = FILTER_TYPES
 
-    return (
+    if (!filter_root) return null
+
+    return ReactDOM.createPortal(
         <div className="movies-filter">
             <div className="movies-filter__display">
-                <Filter size="large" className={'movies-filter__icon'} />
+                <Filter
+                    size="large"
+                    className="movies-filter__icon"
+                    color="white"
+                />
             </div>
             <select
                 ref={select_ref}
@@ -36,7 +46,8 @@ const MovieFilter: React.FC<TMovieFilterProps> = ({
                     </option>
                 ))}
             </select>
-        </div>
+        </div>,
+        filter_root
     )
 }
 

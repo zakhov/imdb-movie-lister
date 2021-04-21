@@ -11,11 +11,12 @@ const NavBar: React.FC = () => (
         justify="between"
         background="neutral-3"
         elevation="large"
-        style={{ zIndex: 2 }}
+        style={{ zIndex: 2, position: 'fixed', height: '88px', width: '100%' }}
     >
         <Link to="/">
             <Home size="large" />
         </Link>
+        <Box id="filter-root" direction="column" />
     </Box>
 )
 

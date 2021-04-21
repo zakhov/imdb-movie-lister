@@ -1,5 +1,6 @@
 import * as React from 'react'
 import ReactDOM from 'react-dom'
+import Div100vh from 'react-div-100vh'
 import {
     Button,
     Box,
@@ -13,8 +14,9 @@ import {
     Text,
 } from 'grommet'
 import { Close, ShareOption } from 'grommet-icons'
-import { movieDetailsEndPoint } from 'config'
+import { movieDetailsEndPoint, movieBookingLink } from 'config'
 import { getMovieDuration, getDate, getImageURL } from 'helpers'
+import Loading from 'components/loading'
 
 const MovieDetails: React.FC<TMovieDetailsProps> = ({
     id,
@@ -41,6 +43,7 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({
     const {
         overview,
         poster_path,
+        backdrop_path,
         genres,
         spoken_languages,
         runtime,
@@ -49,147 +52,142 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({
     } = states.details as TMovieDataDetails
 
     const bookMovie = (event: React.MouseEvent<HTMLElement>) =>
-        window.open('https://www.cathaycineplexes.com.sg/', '__blank')
+        window.open(movieBookingLink, '__blank')
 
     const movieDetailsContent = (
         <React.Fragment>
             {states.is_loading ? (
-                <Box pad="medium" fill>
-                    <Box
-                        direction="row-responsive"
-                        justify="center"
-                        align="center"
-                        gap="none"
-                    >
-                        Content is loading...
-                    </Box>
-                </Box>
+                <Loading />
             ) : (
-                <Box fill pad={{ vertical: 'small', horizontal: 'medium' }}>
-                    <Box
-                        direction="row-responsive"
-                        justify="between"
-                        align="center"
-                        gap="none"
-                    >
-                        <CardHeader height="xxsmall" alignSelf="center">
-                            <Heading level="4">
-                                {title} ({getDate(release_date).year})
-                            </Heading>
-                        </CardHeader>
-                        <Close
-                            cursor="pointer"
-                            color="brand"
-                            size="medium"
-                            onClick={onClose}
-                        />
-                    </Box>
-                    <CardBody>
-                        <Image
-                            fit="contain"
-                            src={
-                                poster_path
-                                    ? getImageURL(poster_path, false)
-                                    : 'https://place-hold.it/500x500'
-                            }
-                            a11yTitle="poster"
-                        />
-                        <Grid
-                            columns={{
-                                count: 3,
-                                size: 'auto',
-                            }}
-                            gap="small"
-                        >
-                            <Box
-                                justify="center"
-                                align="start"
-                                gap="small"
-                                pad="small"
-                            >
-                                <Heading level="4">Genres</Heading>
-                                {genres.length > 0 ? (
-                                    genres.map((genre: any, index: number) => (
-                                        <Text size="xsmall" key={index}>
-                                            {genre.name}
-                                        </Text>
-                                    ))
-                                ) : (
-                                    <Text size="xsmall">
-                                        Genres info not available
-                                    </Text>
-                                )}
-                            </Box>
-                            <Box
-                                justify="center"
-                                align="start"
-                                gap="small"
-                                pad="small"
-                            >
-                                <Heading level="4">Languages</Heading>
-                                {spoken_languages.length > 0 ? (
-                                    spoken_languages.map(
-                                        (lang: any, index: number) => (
-                                            <Text size="xsmall" key={index}>
-                                                {lang.english_name}
-                                            </Text>
-                                        )
-                                    )
-                                ) : (
-                                    <Text size="xsmall">
-                                        Language info not available
-                                    </Text>
-                                )}
-                            </Box>
-                            <Box
-                                justify="center"
-                                align="start"
-                                pad="small"
-                                gap="small"
-                            >
-                                <Heading level="4">Duration</Heading>
-                                {runtime > 0 ? (
-                                    <Text size="small">
-                                        {getMovieDuration(runtime)}
-                                    </Text>
-                                ) : (
-                                    <Text size="xsmall">
-                                        Duration info not available
-                                    </Text>
-                                )}
-                            </Box>
-                        </Grid>
+                <Div100vh>
+                    <Box fill pad={{ vertical: 'small', horizontal: 'medium' }}>
                         <Box
-                            direction="row-responsive"
-                            justify="center"
-                            pad="small"
-                        >
-                            <Text size="small">
-                                {overview.length > 2
-                                    ? overview
-                                    : 'No synopsis available'}
-                            </Text>
-                        </Box>
-                    </CardBody>
-                    <CardFooter>
-                        <Box
-                            fill
                             direction="row"
-                            justify="center"
+                            justify="between"
                             align="center"
-                            pad="small"
+                            gap="none"
                         >
-                            <Button
-                                primary
-                                label="Book Movie"
-                                onClick={bookMovie}
+                            <CardHeader height="xxsmall" alignSelf="center">
+                                <Heading level="4">
+                                    {title} ({getDate(release_date).year})
+                                </Heading>
+                            </CardHeader>
+                            <Close
+                                cursor="pointer"
+                                color="brand"
+                                size="medium"
+                                onClick={onClose}
                             />
-                            <Box direction="row" pad="small">
-                                <ShareOption size="medium" />
-                            </Box>
                         </Box>
-                    </CardFooter>
-                </Box>
+                        <CardBody>
+                            <Image
+                                fit="contain"
+                                src={
+                                    poster_path
+                                        ? getImageURL(poster_path, false)
+                                        : 'https://place-hold.it/500x500'
+                                }
+                                a11yTitle="poster"
+                            />
+                            <Grid
+                                columns={{
+                                    count: 3,
+                                    size: 'auto',
+                                }}
+                                gap="small"
+                            >
+                                <Box
+                                    justify="center"
+                                    align="start"
+                                    gap="small"
+                                    pad="small"
+                                >
+                                    <Heading level="4">Genres</Heading>
+                                    {genres.length > 0 ? (
+                                        genres.map(
+                                            (genre: any, index: number) => (
+                                                <Text size="xsmall" key={index}>
+                                                    {genre.name}
+                                                </Text>
+                                            )
+                                        )
+                                    ) : (
+                                        <Text size="xsmall">
+                                            Genres info not available
+                                        </Text>
+                                    )}
+                                </Box>
+                                <Box
+                                    justify="center"
+                                    align="start"
+                                    gap="small"
+                                    pad="small"
+                                >
+                                    <Heading level="4">Languages</Heading>
+                                    {spoken_languages.length > 0 ? (
+                                        spoken_languages.map(
+                                            (lang: any, index: number) => (
+                                                <Text size="xsmall" key={index}>
+                                                    {lang.english_name}
+                                                </Text>
+                                            )
+                                        )
+                                    ) : (
+                                        <Text size="xsmall">
+                                            Language info not available
+                                        </Text>
+                                    )}
+                                </Box>
+                                <Box
+                                    justify="center"
+                                    align="start"
+                                    pad="small"
+                                    gap="small"
+                                >
+                                    <Heading level="4">Duration</Heading>
+                                    {runtime > 0 ? (
+                                        <Text size="small">
+                                            {getMovieDuration(runtime)}
+                                        </Text>
+                                    ) : (
+                                        <Text size="xsmall">
+                                            Duration info not available
+                                        </Text>
+                                    )}
+                                </Box>
+                            </Grid>
+                            <Box
+                                direction="row-responsive"
+                                justify="center"
+                                pad="small"
+                            >
+                                <Text size="small">
+                                    {overview.length > 2
+                                        ? overview
+                                        : 'No synopsis available'}
+                                </Text>
+                            </Box>
+                        </CardBody>
+                        <CardFooter>
+                            <Box
+                                fill
+                                direction="row"
+                                justify="center"
+                                align="center"
+                                pad="small"
+                            >
+                                <Button
+                                    primary
+                                    label="Book Movie"
+                                    onClick={bookMovie}
+                                />
+                                <Box direction="row" pad="small">
+                                    <ShareOption size="medium" />
+                                </Box>
+                            </Box>
+                        </CardFooter>
+                    </Box>
+                </Div100vh>
             )}
         </React.Fragment>
     )
@@ -220,6 +218,7 @@ type TMovieDetailsProps = {
 
 type TMovieDataDetails = {
     poster_path: string
+    backdrop_path: string
     overview: string
     genres: string[]
     spoken_languages: string[]

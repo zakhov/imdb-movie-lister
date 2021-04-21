@@ -21,3 +21,5 @@ export const movieListEndPoint = (
 
 export const movieDetailsEndPoint = (id: string) =>
     `http://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`
+
+export const movieBookingLink = 'https://www.cathaycineplexes.com.sg/'

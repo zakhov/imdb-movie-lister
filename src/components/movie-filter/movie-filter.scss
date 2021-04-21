@@ -1,14 +1,10 @@
 .movies-filter {
-    position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
-    top: 6.4rem;
     border-radius: 0.4rem;
-    right: 1.4rem;
     width: 4rem;
     height: 4rem;
-    background-color: gainsboro;
     z-index: 2;
     user-select: none;
     -webkit-touch-callout: none;
@@ -21,7 +17,7 @@
     &__select {
         position: absolute;
         opacity: 0;
-        width: 100%;
+        width: 4rem;
         height: auto;
         font-size: 2rem;
     }
