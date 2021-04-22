@@ -1,6 +1,5 @@
 import * as React from 'react'
 import PullToRefresh from 'react-simple-pull-to-refresh'
-import { RouteComponentProps } from 'react-router-dom'
 import { movieListEndPoint } from 'config'
 import { Box, InfiniteScroll, Spinner } from 'grommet'
 import MovieFilter from 'components/movie-filter'
@@ -9,7 +8,7 @@ import MovieDetails from 'components/movie-details'
 import Loading from 'components/loading'
 import { sortMovies } from 'helpers'
 
-const Home: React.FC<RouteComponentProps<{ movieId: string }>> = () => {
+const Home: React.FC = () => {
     const { useEffect, useState } = React
 
     const [sort_type, setSortType] = useState({
@@ -24,6 +23,7 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = () => {
     const [is_fetching, setIsFetching] = useState(false)
 
     useEffect(() => {
+        // didMount lifecycle
         fetchDetails(pageNumber).then((movies: any) => {
             const sorted_movies = sortMovies(movies, sort_type.value)
             setMoviesList(sorted_movies)
@@ -46,6 +46,7 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = () => {
 
     const handleRefresh = (): Promise<void> =>
         new Promise((res) => {
+            // reset to initial values
             setPageNumber(1)
             setMoviesList([])
             // fetch new data
@@ -116,6 +117,7 @@ const Home: React.FC<RouteComponentProps<{ movieId: string }>> = () => {
                                         onClick={(
                                             event: React.MouseEvent<HTMLElement>
                                         ) => handleClick(event, item.id)}
+                                        data-testid="home-movie-card"
                                     />
                                 )}
                             </InfiniteScroll>

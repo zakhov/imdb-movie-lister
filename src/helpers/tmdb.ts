@@ -1,7 +1,11 @@
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 
-export const getImageURL = (filename: string, size?: number | boolean) => {
+export const getImageURL = (
+    filename: string,
+    size?: number | boolean,
+    image_type?: string
+) => {
     if (size) {
         return `https://image.tmdb.org/t/p/w${size}/${filename}`
     }
@@ -40,7 +44,6 @@ export const sortMovies = (
         }
         return value
     }
-    console.log(sort_type)
     const sortArray = moviesObj.sort((a: any, b: any) => {
         const value_a = parseValue(a[sort_type], sort_type)
         const value_b = parseValue(b[sort_type], sort_type)
