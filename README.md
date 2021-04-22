@@ -18,23 +18,23 @@ Create a standalone movie app / mobile web(responsive UI) with the following scr
 
 ### **Home screen with list of available movies**
 
-- Ordered by release date (default), alphabetical, rating - can use dropdown
-- Pull to refresh
-- Load when scrolled to bottom
-- Each movie to include:
-  - Poster/Backdrop image
-  - Title
-  - Popularity
+-   Ordered by release date (default), alphabetical, rating - can use dropdown
+-   Pull to refresh
+-   Load when scrolled to bottom
+-   Each movie to include:
+    -   Poster/Backdrop image
+    -   Title
+    -   Popularity
 
 ### **Detail screen**
 
 Movie details should have the following:
 
-- Synopsis
-- Genres
-- Language
-- Duration
-- Book the movie (simulate opening of this [link](https://www.cathaycineplexes.com.sg/) in a web view)
+-   Synopsis
+-   Genres
+-   Language
+-   Duration
+-   Book the movie (simulate opening of this [link](https://www.cathaycineplexes.com.sg/) in a web view)
 
 ### **Frontend Design**
 
@@ -79,9 +79,9 @@ Please use this repo for your commits.
 
 ## Evaluation Criteria
 
-- Clean, readable, maintainable, and performant code
-- Clear documentation that describe your assumptions and design considerations, you can use the wiki in this repo. Don't know how to create wiki? [Create one](https://docs.github.com/en/github/building-a-strong-community/adding-or-editing-wiki-pages)
-- Unit Tests will be evaluated
+-   Clean, readable, maintainable, and performant code
+-   Clear documentation that describe your assumptions and design considerations, you can use the wiki in this repo. Don't know how to create wiki? [Create one](https://docs.github.com/en/github/building-a-strong-community/adding-or-editing-wiki-pages)
+-   Unit Tests will be evaluated
 
 That’s the end of the assignment, we hope you have fun!
 looking forward to your submission.
