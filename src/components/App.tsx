@@ -9,7 +9,7 @@ const App: React.FC = () => {
     // const [darkMode, setDarkMode] = React.useState(false);
 
     return (
-        <Grommet theme={grommet} themeMode="dark">
+        <Grommet theme={grommet} themeMode="light">
             <Router>
                 <Navbar />
                 <Box style={{ height: '64px', pointerEvents: 'none' }} />
