@@ -9,7 +9,7 @@ const NavBar: React.FC = () => (
         align="center"
         pad={{ vertical: 'small', horizontal: 'small' }}
         justify="between"
-        background="neutral-3"
+        background="brand"
         elevation="large"
         style={{ zIndex: 2, position: 'fixed', height: '50px', width: '100%' }}
     >

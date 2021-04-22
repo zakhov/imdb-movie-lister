@@ -68,7 +68,10 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({
                             gap="none"
                         >
                             <CardHeader height="xxsmall" alignSelf="center">
-                                <Heading level="4">
+                                <Heading
+                                    level="4"
+                                    data-testid="movie-details-title"
+                                >
                                     {title} ({getDate(release_date).year})
                                 </Heading>
                             </CardHeader>
@@ -81,6 +84,7 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({
                         </Box>
                         <CardBody>
                             <Image
+                                data-testid="movie-details-poster"
                                 fit="contain"
                                 src={
                                     poster_path
@@ -111,7 +115,11 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({
                                     {genres.length > 0 ? (
                                         genres.map(
                                             (genre: any, index: number) => (
-                                                <Text size="xsmall" key={index}>
+                                                <Text
+                                                    size="xsmall"
+                                                    key={index}
+                                                    data-testid="movie-details-genres"
+                                                >
                                                     {genre.name}
                                                 </Text>
                                             )
@@ -132,7 +140,11 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({
                                     {spoken_languages.length > 0 ? (
                                         spoken_languages.map(
                                             (lang: any, index: number) => (
-                                                <Text size="xsmall" key={index}>
+                                                <Text
+                                                    data-testid="movie-details-languages"
+                                                    size="xsmall"
+                                                    key={index}
+                                                >
                                                     {lang.english_name}
                                                 </Text>
                                             )
@@ -151,7 +163,10 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({
                                 >
                                     <Heading level="4">Duration</Heading>
                                     {runtime > 0 ? (
-                                        <Text size="small">
+                                        <Text
+                                            size="small"
+                                            data-testid="movie-details-duration"
+                                        >
                                             {getMovieDuration(runtime)}
                                         </Text>
                                     ) : (
@@ -166,7 +181,10 @@ const MovieDetails: React.FC<TMovieDetailsProps> = ({
                                 justify="center"
                                 pad="small"
                             >
-                                <Text size="small">
+                                <Text
+                                    size="small"
+                                    data-testid="movie-details-synopsis"
+                                >
                                     {overview.length > 2
                                         ? overview
                                         : 'No synopsis available'}
